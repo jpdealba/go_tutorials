@@ -1,56 +1,68 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 )
 
 func main() {
-	var printValue string = "Hello, World!"
-	printMe(printValue)
+	// ! ARRAYS
 
-	var numerator int = 11
-	var denominator int = 2
-	var result, remainder, err = intDivision(numerator, denominator)
-	// with if
-	// if err != nil {
-	// 	fmt.Println(err.Error())
-	// } else if remainder == 0 {
-	// 	fmt.Printf("The result of the integer division is %v", result)
-	// } else {
-	// 	fmt.Printf("The result of the integer division is %v with a remainder of %v\n", result, remainder)
-	// }
-	// with switch statement
-	switch {
-	case err != nil:
-		fmt.Println(err.Error())
-	case remainder == 0:
-		fmt.Printf("The result of the integer division is %v", result)
-	default:
-		fmt.Printf("The result of the integer division is %v with a remainder of %v\n", result, remainder)
+	var intArr [3]int32
+	// arrays are contiguous in memory and are indexable
+	fmt.Println(&intArr[0])
+	fmt.Println(&intArr[1])
+	fmt.Println(&intArr[2])
+
+	// initialize array
+	var intArr2 [3]int32 = [3]int32{1, 2, 3} // or intArr2 := [3]int32{1, 2, 3} or intArr2 := [...]int32{1,2,3}
+	fmt.Println(intArr2)
+
+	// ! SLICES
+	// slices are arrays with steroids, it checks if the array has enough room for another number,
+	// if not it creates a new array with double the size and copies the old array into the new one
+	var intSlice []int32 = []int32{4, 5, 6}
+	fmt.Printf("The length is %v with capacity %v\n", len(intSlice), cap(intSlice))
+	fmt.Println(intSlice)
+	intSlice = append(intSlice, 7)
+	fmt.Printf("The length is %v with capacity %v\n", len(intSlice), cap(intSlice))
+	fmt.Println(intSlice)
+
+	// append multiple slices
+	var intSlice2 []int32 = []int32{8, 9}
+	intSlice = append(intSlice, intSlice2...)
+
+	var intSlice3 []int32 = make([]int32, 3, 5) // make a slice with length 3 and capacity 5, this makes it faster
+	fmt.Printf("The length is %v with capacity %v\n", len(intSlice3), cap(intSlice3))
+
+	// ! MAPS
+	var myMap map[string]uint8 = make(map[string]uint8)
+	fmt.Println(myMap)
+
+	// map always return something, if the key is not found it returns the zero value of the value type
+	var myMap2 = map[string]uint8{"Adam": 23, "Sarah": 45}
+	fmt.Println(myMap2["Adam"])
+
+	var age, ok = myMap2["Adam"]
+	fmt.Println(age, ok)
+	if ok {
+		fmt.Println(myMap2["Adam"])
+	} else {
+		fmt.Println("Not found")
 	}
 
-	// switch based on remainder
-	switch remainder {
-	case 0:
-		fmt.Println("Integer division, no remainder")
-	default:
-		fmt.Printf("Division with remainder %d\n", remainder)
+	delete(myMap2, "Adam")
+
+	// ! LOOPS
+	// loop a map, this doesnt guarantee the order of the keys
+	for name, age := range myMap2 {
+		fmt.Printf("%v is %v years old\n", name, age)
 	}
 
-}
-
-func printMe(printValue string) {
-	fmt.Println(printValue)
-}
-
-func intDivision(numerator int, denominator int) (int, int, error) {
-	var err error
-	if denominator == 0 {
-		err = errors.New("Cannot divide by zero")
-		return 0, 0, err
+	for i, v := range intArr {
+		fmt.Printf("Index %v has value %v\n", i, v)
 	}
-	var result int = numerator / denominator
-	var remainder int = numerator % denominator
-	return result, remainder, err
+
+	for i := 0; i < 10; i++ {
+		fmt.Println(i)
+	}
 }
